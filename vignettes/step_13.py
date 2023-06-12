@@ -1,11 +1,11 @@
-import pyro.distributions as dist
-import pyro
-import torch
-from pyro.distributions.constraints import positive
-from pyro.optim import Adam
-from pyro.infer import SVI, Trace_ELBO
 import numpy as np
+import pyro
+import pyro.distributions as dist
+import torch
 import tqdm
+from pyro.distributions.constraints import positive
+from pyro.infer import SVI, Trace_ELBO
+from pyro.optim import Adam
 
 
 def model(data=None, n_obs=None):

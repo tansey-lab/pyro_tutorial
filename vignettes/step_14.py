@@ -1,12 +1,12 @@
-import pyro.distributions as dist
+import numpy as np
 import pyro
-import torch
+import pyro.distributions as dist
 import pyro.util
-from pyro.optim import Adam
+import torch
+import tqdm
 from pyro.infer import SVI, Trace_ELBO
 from pyro.infer.autoguide import AutoNormal
-import numpy as np
-import tqdm
+from pyro.optim import Adam
 
 
 def model(data=None, n_obs=None):

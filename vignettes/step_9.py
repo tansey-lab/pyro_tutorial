@@ -1,9 +1,8 @@
 import pyro
 import pyro.distributions as dist
 import torch
-
-from pyro import poutine
 import torch.distributions
+from pyro import poutine
 
 
 def model(data=None, n_obs=None):

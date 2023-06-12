@@ -1,9 +1,9 @@
-import pyro.distributions as dist
+import numpy as np
 import pyro
+import pyro.distributions as dist
 import torch
 from pyro.distributions.constraints import positive
 from pyro.infer import HMC, MCMC
-import numpy as np
 
 
 def model(data=None, n_obs=None):

@@ -1,5 +1,5 @@
-import pyro.distributions as dist
 import pyro
+import pyro.distributions as dist
 import pyro.util
 from pyro import poutine
 
