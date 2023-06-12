@@ -4,7 +4,8 @@ import torch
 
 from pyro import poutine
 
-PRIOR_BELIEF_IN_MU = 0.
+PRIOR_BELIEF_IN_MU = 0.0
+
 
 def model(data=None, n_obs=None):
     if data is None and n_obs is None:
@@ -28,7 +29,14 @@ def main():
     for node in one_trace.nodes:
         print(node)
 
-    pyro.render_model(model, model_args=(None, 10,), filename="step_5_model.png")
+    pyro.render_model(
+        model,
+        model_args=(
+            None,
+            10,
+        ),
+        filename="step_5_model.png",
+    )
 
 
 if __name__ == "__main__":

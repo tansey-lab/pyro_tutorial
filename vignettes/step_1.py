@@ -4,7 +4,7 @@ import torch
 
 
 def model():
-    mu = pyro.param("mu", torch.tensor(0.))
+    mu = pyro.param("mu", torch.tensor(0.0))
     y = pyro.sample("y", dist.Normal(mu, 1))
     return y
 
@@ -20,6 +20,7 @@ def main():
     print(one_sample_as_a_number)
 
     print([model().detach().numpy().item() for _ in range(10)])
+
 
 if __name__ == "__main__":
     main()

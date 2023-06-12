@@ -4,7 +4,7 @@ import torch
 
 
 def model(data=None):
-    mu = pyro.param("mu", torch.tensor(0.))
+    mu = pyro.param("mu", torch.tensor(0.0))
     y = pyro.sample("y", dist.Normal(mu, 1), obs=data)
     return y
 

@@ -5,6 +5,7 @@ import torch
 from pyro import poutine
 import torch.distributions
 
+
 def model(data=None, n_obs=None):
     if data is None and n_obs is None:
         raise ValueError("Someone has gotta tell us how many observations there are")
@@ -21,19 +22,20 @@ def model(data=None, n_obs=None):
 
 
 def main():
-    mu_param = torch.tensor(0., requires_grad=True)
+    mu_param = torch.tensor(0.0, requires_grad=True)
 
-    conditioned_model = poutine.condition(model, {'mu': mu_param})
+    conditioned_model = poutine.condition(model, {"mu": mu_param})
 
-    one_trace_from_conditioned_model = poutine.trace(conditioned_model).get_trace(data=None, n_obs=10)
-    total_loss = 0.
+    one_trace_from_conditioned_model = poutine.trace(conditioned_model).get_trace(
+        data=None, n_obs=10
+    )
+    total_loss = 0.0
     for k, site in one_trace_from_conditioned_model.nodes.items():
         if site["type"] == "sample":
             total_loss = total_loss + site["fn"].log_prob(site["value"]).sum()
 
     total_loss.backward()
     print(mu_param.grad)
-
 
 
 if __name__ == "__main__":

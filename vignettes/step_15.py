@@ -13,7 +13,7 @@ def model(data=None, N=None, J=None):
         J = data.shape[1]
 
     with pyro.plate("J", J):
-        mu = pyro.sample("mu", dist.Gamma(1., 1.))
+        mu = pyro.sample("mu", dist.Gamma(1.0, 1.0))
         with pyro.plate("N", N):
             y = pyro.sample("y", dist.Normal(mu, 1), obs=data)
 
@@ -29,7 +29,7 @@ def model_v2(data=None, N=None, J=None):
         J = data.shape[1]
 
     with pyro.plate("J", J):
-        mu = pyro.sample("mu", dist.Gamma(1., 1.))
+        mu = pyro.sample("mu", dist.Gamma(1.0, 1.0))
 
     with pyro.plate("N", N, dim=-2):
         y = pyro.sample("y", dist.Normal(mu, 1), obs=data)

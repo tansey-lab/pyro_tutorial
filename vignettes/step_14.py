@@ -8,6 +8,7 @@ from pyro.infer.autoguide import AutoNormal
 import numpy as np
 import tqdm
 
+
 def model(data=None, n_obs=None):
     if data is None and n_obs is None:
         raise ValueError("Someone has gotta tell us how many observations there are")
@@ -15,7 +16,7 @@ def model(data=None, n_obs=None):
     if data is not None:
         n_obs = data.shape[0]
 
-    mu = pyro.sample("mu", dist.Gamma(1., 1.))
+    mu = pyro.sample("mu", dist.Gamma(1.0, 1.0))
 
     with pyro.plate("N", n_obs):
         y = pyro.sample("y", dist.Normal(mu, 1), obs=data)
@@ -46,9 +47,7 @@ def main():
 
     mu_loc = pyro.param("AutoNormal.locs.mu").item()
     mu_scale = pyro.param("AutoNormal.scales.mu").item()
-    print("mu_truth: ", mu_truth,
-            "mu_loc: ", mu_loc,
-            "mu_scale: ", mu_scale)
+    print("mu_truth: ", mu_truth, "mu_loc: ", mu_loc, "mu_scale: ", mu_scale)
 
 
 if __name__ == "__main__":

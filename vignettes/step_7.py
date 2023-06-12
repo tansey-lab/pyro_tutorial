@@ -3,6 +3,7 @@ import pyro.distributions as dist
 
 from pyro import poutine
 
+
 def model(data=None, n_obs=None):
     if data is None and n_obs is None:
         raise ValueError("Someone has gotta tell us how many observations there are")
@@ -19,7 +20,14 @@ def model(data=None, n_obs=None):
 
 
 def main():
-    pyro.render_model(model, model_args=(None, 10,), filename="step_7_model.png")
+    pyro.render_model(
+        model,
+        model_args=(
+            None,
+            10,
+        ),
+        filename="step_7_model.png",
+    )
 
     one_trace = poutine.trace(model).get_trace(data=None, n_obs=10)
 

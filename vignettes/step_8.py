@@ -4,6 +4,7 @@ import torch
 
 from pyro import poutine
 
+
 def model(data=None, n_obs=None):
     if data is None and n_obs is None:
         raise ValueError("Someone has gotta tell us how many observations there are")
@@ -20,12 +21,18 @@ def model(data=None, n_obs=None):
 
 
 def main():
-    conditioned_model = poutine.condition(model, {'mu': torch.tensor(999.)})
+    conditioned_model = poutine.condition(model, {"mu": torch.tensor(999.0)})
 
-    one_trace_from_conditioned_model = poutine.trace(conditioned_model).get_trace(data=None, n_obs=10)
+    one_trace_from_conditioned_model = poutine.trace(conditioned_model).get_trace(
+        data=None, n_obs=10
+    )
 
-    sampled_y_vector = one_trace_from_conditioned_model.nodes["y"]["value"].detach().numpy()
-    sampled_mu_value = one_trace_from_conditioned_model.nodes["mu"]["value"].detach().numpy()
+    sampled_y_vector = (
+        one_trace_from_conditioned_model.nodes["y"]["value"].detach().numpy()
+    )
+    sampled_mu_value = (
+        one_trace_from_conditioned_model.nodes["mu"]["value"].detach().numpy()
+    )
 
     print("Sampled mu is:")
     print(sampled_mu_value)

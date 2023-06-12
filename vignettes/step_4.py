@@ -5,7 +5,8 @@ import numpy as np
 
 from pyro import poutine
 
-PRIOR_BELIEF_IN_MU = 0.
+PRIOR_BELIEF_IN_MU = 0.0
+
 
 def model(data=None, n_obs=None):
     if data is None and n_obs is None:
@@ -35,7 +36,6 @@ def main():
 
     print("The log_prob_sum of this sample is:")
     print(one_trace.log_prob_sum().detach().numpy().item())
-
 
 
 if __name__ == "__main__":

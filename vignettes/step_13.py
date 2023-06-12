@@ -15,7 +15,7 @@ def model(data=None, n_obs=None):
     if data is not None:
         n_obs = data.shape[0]
 
-    mu = pyro.sample("mu", dist.Gamma(1., 1.))
+    mu = pyro.sample("mu", dist.Gamma(1.0, 1.0))
 
     with pyro.plate("N", n_obs):
         y = pyro.sample("y", dist.Normal(mu, 1), obs=data)
@@ -24,8 +24,8 @@ def model(data=None, n_obs=None):
 
 
 def guide(data):
-    mu_loc = pyro.param("mu_loc", torch.tensor(0.))
-    mu_scale = pyro.param("mu_scale", torch.tensor(1.), constraint=positive)
+    mu_loc = pyro.param("mu_loc", torch.tensor(0.0))
+    mu_scale = pyro.param("mu_scale", torch.tensor(1.0), constraint=positive)
 
     # Why cant we use normal?
     pyro.sample("mu", dist.LogNormal(mu_loc, mu_scale))
@@ -52,9 +52,7 @@ def main():
 
     mu_loc = pyro.param("mu_loc").item()
     mu_scale = pyro.param("mu_scale").item()
-    print("mu_truth: ", mu_truth,
-            "mu_loc: ", mu_loc,
-            "mu_scale: ", mu_scale)
+    print("mu_truth: ", mu_truth, "mu_loc: ", mu_loc, "mu_scale: ", mu_scale)
 
 
 if __name__ == "__main__":
