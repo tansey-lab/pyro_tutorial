@@ -39,8 +39,10 @@ def main():
     print("Sampled y is:")
     print(sampled_y_vector)
 
+    log_prob_sum = one_trace.log_prob_sum()
+
     print("The log_prob_sum of this sample is:")
-    print(one_trace.log_prob_sum().detach().numpy().item())
+    print(log_prob_sum.detach().numpy().item())
 
 
 if __name__ == "__main__":

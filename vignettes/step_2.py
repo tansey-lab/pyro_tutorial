@@ -15,6 +15,7 @@ def main():
 
     one_sample_as_a_number = one_sample.detach().numpy().item()
 
+    print("One (observed) sample:")
     print(one_sample_as_a_number)
 
 

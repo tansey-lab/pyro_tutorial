@@ -34,7 +34,7 @@ def main():
         one_trace_from_conditioned_model.nodes["mu"]["value"].detach().numpy()
     )
 
-    print("Sampled mu is:")
+    print("Mu (which isn't really sampled) is:")
     print(sampled_mu_value)
     print("Sampled y is:")
     print(sampled_y_vector)

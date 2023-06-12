@@ -17,8 +17,9 @@ def main():
     # value out as a regular python number
     one_sample_as_a_number = one_sample.detach().numpy().item()
 
+    print("One sample:")
     print(one_sample_as_a_number)
-
+    print("Many samples:")
     print([model().detach().numpy().item() for _ in range(10)])
 
 

@@ -21,19 +21,19 @@ def model(data=None, n_obs=None):
 
 
 def main():
-    mu_param = torch.tensor(0.0, requires_grad=True)
+    mu_param = torch.tensor(999.0, requires_grad=True)
 
     conditioned_model = poutine.condition(model, {"mu": mu_param})
 
     one_trace_from_conditioned_model = poutine.trace(conditioned_model).get_trace(
         data=None, n_obs=10
     )
-    total_loss = 0.0
-    for k, site in one_trace_from_conditioned_model.nodes.items():
-        if site["type"] == "sample":
-            total_loss = total_loss + site["fn"].log_prob(site["value"]).sum()
+
+    total_loss = one_trace_from_conditioned_model.log_prob_sum()
 
     total_loss.backward()
+
+    print("The gradient of the log_prob_sum is:")
     print(mu_param.grad)
 
 

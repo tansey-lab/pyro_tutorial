@@ -13,6 +13,7 @@ def model(data=None, n_obs=None):
     if data is not None:
         n_obs = data.shape[0]
 
+    # One small change here:
     mu = pyro.sample("mu", dist.Gamma(1.0, 1.0))
 
     with pyro.plate("N", n_obs):

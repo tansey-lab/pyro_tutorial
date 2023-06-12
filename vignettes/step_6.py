@@ -23,32 +23,35 @@ def model(data=None, n_obs=None):
 
 
 def main():
+    rng = np.random.default_rng(42)
+
     good_data = torch.Tensor(
-        np.random.default_rng(42).normal(PRIOR_BELIEF_IN_MU, 1, size=1000)
+        rng.normal(PRIOR_BELIEF_IN_MU, 1, size=1000)
     )
     bad_data = torch.Tensor(
-        np.random.default_rng(42).normal(PRIOR_BELIEF_IN_MU + 1, 1, size=1000)
+        rng.normal(PRIOR_BELIEF_IN_MU + 1, 1, size=1000)
     )
 
-    good_trace = poutine.trace(model).get_trace(data=good_data, n_obs=10)
-    bad_trace = poutine.trace(model).get_trace(data=bad_data, n_obs=10)
+    good_trace = poutine.trace(model).get_trace(data=good_data)
+    bad_trace = poutine.trace(model).get_trace(data=bad_data)
 
     print(
         "Good trace log prob sum:",
-        -1 * good_trace.log_prob_sum().detach().numpy().item(),
+        good_trace.log_prob_sum().detach().numpy().item(),
     )
     print(
-        "Bad trace log prob sum:", -1 * bad_trace.log_prob_sum().detach().numpy().item()
+        "Bad trace log prob sum:",
+        bad_trace.log_prob_sum().detach().numpy().item()
     )
 
     even_worse_data = torch.Tensor(
-        np.random.default_rng(42).normal(PRIOR_BELIEF_IN_MU + 2, 1, size=1000)
+        rng.normal(PRIOR_BELIEF_IN_MU + 2, 1, size=1000)
     )
-    even_worse_trace = poutine.trace(model).get_trace(data=even_worse_data, n_obs=10)
+    even_worse_trace = poutine.trace(model).get_trace(data=even_worse_data)
 
     print(
         "Even worse trace log prob sum:",
-        -1 * even_worse_trace.log_prob_sum().detach().numpy().item(),
+        even_worse_trace.log_prob_sum().detach().numpy().item(),
     )
 
 

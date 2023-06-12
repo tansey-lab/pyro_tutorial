@@ -22,12 +22,14 @@ def main():
 
     one_sample_as_numbers = one_sample.detach().numpy()
 
+    print("One sample (of 10):")
     print(one_sample_as_numbers)
 
     one_observed_sample = model(data=torch.tensor([1.0, 2.0, 3.0]), n_obs=None)
 
     one_observed_sample_as_numbers = one_observed_sample.detach().numpy()
 
+    print("One observed sample (of 3):")
     print(one_observed_sample_as_numbers)
 
 

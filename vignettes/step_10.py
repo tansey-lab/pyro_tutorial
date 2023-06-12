@@ -31,7 +31,8 @@ def main():
     np.random.default_rng(0)
 
     generated_data = torch.tensor(generate_data(mu_truth, np.random.default_rng()))
-    print(generated_data.mean())
+    print("The mean of our generated dataset is:")
+    print(generated_data.mean().detach().numpy().item())
 
     mu_param = torch.tensor(0.0, requires_grad=True)
 

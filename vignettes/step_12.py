@@ -35,9 +35,11 @@ def generate_data(mu_truth, rng):
 
 def main():
     rng = np.random.default_rng(0)
-    mu_truth = 4.2
+    data = torch.Tensor(generate_data(4.2, rng))
+    mu_truth = data.mean().detach().numpy().item()
 
-    data = torch.Tensor(generate_data(mu_truth, rng))
+    print("The mean of our generated dataset is:")
+    print(data.mean().detach().numpy().item())
 
     hmc_kernel = HMC(model)
     mcmc = MCMC(hmc_kernel, warmup_steps=100, num_samples=200)
