@@ -1,24 +1,17 @@
-import os
-from collections import defaultdict
-import torch
+import matplotlib.pyplot as plt
 import numpy as np
-import scipy.stats
-from torch.distributions import constraints
-from matplotlib import pyplot
-
 import pyro
 import pyro.distributions as dist
+import pyro.util
+import seaborn as sns
+import torch
+import tqdm
 from pyro import poutine
+from pyro.distributions.transforms import OrderedTransform
+from pyro.infer import SVI, TraceEnum_ELBO, infer_discrete
 from pyro.infer.autoguide import AutoNormal
 from pyro.optim import Adam
-from pyro.infer import SVI, TraceEnum_ELBO, config_enumerate, infer_discrete
-import tqdm
-from pyro.distributions.transforms import OrderedTransform
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.metrics import confusion_matrix
-import tqdm
-import pyro.util
 
 
 def plot_histogram(arr1, arr2, output_fn: str):
@@ -86,29 +79,6 @@ def model(K, data=None, n_obs=None):
             infer={"enumerate": "parallel"})
         return pyro.sample("obs", dist.Normal(locs[assignment], scale), obs=data)
 
-
-def init_loc_fn(site, data, K):
-    if site["name"] == "weights":
-        # Initialize weights to uniform.
-        return torch.ones(K) / K
-    if site["name"] == "scale":
-        return (data.var() / 2).sqrt()
-    if site["name"] == "locs":
-        return data[torch.multinomial(torch.ones(len(data)) / len(data), K)]
-    raise ValueError(site["name"])
-
-
-def get_loss_for_seed(seed, optim, elbo, data, K):
-    pyro.set_rng_seed(seed)
-    pyro.clear_param_store()
-    guide = AutoNormal(
-        poutine.block(model, hide=["assignment"]),
-        init_loc_fn=lambda site: init_loc_fn(site=site, data=data, K=K),
-    )
-    svi = SVI(model, guide, optim, loss=elbo)
-    return svi.loss(model, guide, K, data), seed
-
-
 def main():
     pyro.util.set_rng_seed(0)
     rng = np.random.default_rng(66)
@@ -124,19 +94,10 @@ def main():
 
     guide = AutoNormal(poutine.block(model, hide=["assignment"]))
 
-    best_loss, best_seed = min([get_loss_for_seed(seed, optim, elbo, data, K) for seed in range(100)])
-
-    print("best loss", best_loss, "best seed", best_seed)
-    pyro.set_rng_seed(best_seed)
-    pyro.clear_param_store()
-
-    svi = SVI(model,
-              AutoNormal(poutine.block(model, hide=["assignment"]),
-                         init_loc_fn=lambda site: init_loc_fn(site=site, data=data, K=K)),
-              optim, elbo)
+    svi = SVI(model, guide, optim, elbo)
 
     losses = []
-    for i in tqdm.trange(200):
+    for _ in tqdm.trange(200):
         loss = svi.step(K, data)
         losses.append(loss)
 
@@ -149,7 +110,9 @@ def main():
 
     def classifier(K, data):
         inferred_model = infer_discrete(
-            trained_model, temperature=1, first_available_dim=-2
+            trained_model,
+            temperature=0,
+            first_available_dim=-2
         )  # avoid conflict with data plate
         trace = poutine.trace(inferred_model).get_trace(K, data)
         return trace.nodes["assignment"]["value"]
