@@ -21,16 +21,8 @@ def model(data=None, n_obs=None):
     return y
 
 
-def guide(data):
-    mu_loc = pyro.param("mu_loc", torch.tensor(0.0))
-    mu_scale = pyro.param("mu_scale", torch.tensor(1.0), constraint=positive)
-
-    # Why cant we use normal?
-    pyro.sample("mu", dist.LogNormal(mu_loc, mu_scale))
-
-
 def generate_data(mu_truth, rng):
-    return rng.normal(mu_truth, 1, size=100)
+    return rng.normal(mu_truth, 1, size=10)
 
 
 def main():

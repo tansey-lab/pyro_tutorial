@@ -32,7 +32,7 @@ def guide(data):
 
 
 def generate_data(mu_truth, rng):
-    return rng.normal(mu_truth, 1, size=100)
+    return rng.normal(mu_truth, 1, size=10)
 
 
 def main():
