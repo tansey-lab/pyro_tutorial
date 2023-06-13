@@ -122,6 +122,6 @@ initialization values
 
 # Other Resources
 
-Lecture from David Blei on Variation Inference
+Lecture from David Blei on Variational Inference
 
 https://youtu.be/DaqNNLidswA
