@@ -13,8 +13,15 @@ def model(data=None, n_obs=None):
     if data is not None:
         n_obs = data.shape[0]
 
-    mu = pyro.sample("mu", dist.Gamma(1.0, 1.0))
+    # Let's make our prior alot more complicated!
+    alpha = pyro.sample(
+        "alpha", dist.InverseGamma(torch.Tensor([1.0]), torch.Tensor([1.0]))
+    )
 
+    a = pyro.sample("a", dist.Gamma(alpha, 1.0))
+    b = pyro.sample("b", dist.Gamma(1.0, 1.0))
+
+    mu = pyro.sample("mu", dist.Gamma(a, b))
     with pyro.plate("N", n_obs):
         y = pyro.sample("y", dist.Normal(mu, 1), obs=data)
 

@@ -42,12 +42,12 @@ def main():
 
     svi = SVI(model, autoguide, optimizer, loss=Trace_ELBO())
 
-    for step in tqdm.trange(1000):
+    for step in tqdm.trange(100):
         svi.step(torch.tensor(data, dtype=torch.float32))
 
     mu_loc = pyro.param("AutoNormal.locs.mu").item()
     mu_scale = pyro.param("AutoNormal.scales.mu").item()
-    print("mu_truth: ", mu_truth, "mu_loc: ", mu_loc, "mu_scale: ", mu_scale)
+    print("mu_truth: ", mu_truth, "mu_loc: ", np.exp(mu_loc), "mu_scale: ", mu_scale)
 
 
 if __name__ == "__main__":

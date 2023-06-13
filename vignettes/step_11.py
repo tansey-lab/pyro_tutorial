@@ -13,9 +13,15 @@ def model(data=None, n_obs=None):
     if data is not None:
         n_obs = data.shape[0]
 
-    # One small change here:
-    mu = pyro.sample("mu", dist.Gamma(1.0, 1.0))
+    # Let's make our prior alot more complicated!
+    alpha = pyro.sample(
+        "alpha", dist.InverseGamma(torch.Tensor([1.0]), torch.Tensor([1.0]))
+    )
 
+    a = pyro.sample("a", dist.Gamma(alpha, 1.0))
+    b = pyro.sample("b", dist.Gamma(1.0, 1.0))
+
+    mu = pyro.sample("mu", dist.Gamma(a, b))
     with pyro.plate("N", n_obs):
         y = pyro.sample("y", dist.Normal(mu, 1), obs=data)
 
@@ -23,7 +29,7 @@ def model(data=None, n_obs=None):
 
 
 def generate_data(mu_truth, rng):
-    return rng.normal(mu_truth, 1, size=10)
+    return rng.normal(mu_truth, 1, size=1000)
 
 
 def main():
@@ -31,8 +37,9 @@ def main():
     mu_truth = 4.2
 
     generated_data = torch.tensor(generate_data(mu_truth, np.random.default_rng()))
-
-    mu_param = torch.tensor(0.0, requires_grad=True)
+    print("The mean of our generated dataset is:")
+    print(generated_data.mean().detach().numpy().item())
+    mu_param = torch.tensor(0.1, requires_grad=True)
 
     for i in range(10):
         conditioned_model = poutine.condition(model, {"mu": mu_param})

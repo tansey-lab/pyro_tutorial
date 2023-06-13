@@ -23,7 +23,9 @@ def model(data=None, n_obs=None):
     return y
 
 
-def guide(data):
+# Note that the function signature of the guide function should match the function signature
+# of the model function
+def guide(data=None, n_obs=None):
     mu_loc = pyro.param("mu_loc", torch.tensor(0.0))
     mu_scale = pyro.param("mu_scale", torch.tensor(1.0), constraint=positive)
 
@@ -47,12 +49,14 @@ def main():
 
     manual_guide_svi = SVI(model, guide, optimizer, loss=Trace_ELBO())
 
-    for step in tqdm.trange(1000):
+    for step in tqdm.trange(100):
         manual_guide_svi.step(torch.tensor(data, dtype=torch.float32))
 
     mu_loc = pyro.param("mu_loc").item()
     mu_scale = pyro.param("mu_scale").item()
-    print("mu_truth: ", mu_truth, "mu_loc: ", mu_loc, "mu_scale: ", mu_scale)
+
+    # We need to exp the mu_loc parameter since it is for a LogNormal distribution
+    print("mu_truth: ", mu_truth, "mu_loc: ", np.exp(mu_loc), "mu_scale: ", mu_scale)
 
 
 if __name__ == "__main__":

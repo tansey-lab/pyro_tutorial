@@ -5,6 +5,16 @@ import pyro.util
 from pyro import poutine
 
 
+# This is the kind of indexing that Pyro nested plates DO NOT use
+def the_indexing_we_know_and_love():
+    result = np.zeros((10, 3))
+    for i in range(10):
+        for j in range(3):
+            result[i, j] = i + j
+    print(result)
+
+
+# model and model_v2 show two different ways of nesting plates
 def model(data=None, N=None, J=None):
     if data is None and N is None and J is None:
         raise ValueError("Someone has gotta tell us how many observations there are")
@@ -19,14 +29,6 @@ def model(data=None, N=None, J=None):
             y = pyro.sample("y", dist.Normal(mu, 1), obs=data)
 
     return y
-
-
-def the_indexing_we_know_and_love():
-    result = np.zeros((10, 3))
-    for i in range(10):
-        for j in range(3):
-            result[i, j] = i + j
-    print(result)
 
 
 def model_v2(data=None, N=None, J=None):

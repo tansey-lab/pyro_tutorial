@@ -70,7 +70,8 @@ in our model
 
 ## Step 11
 
-Showing how the process laid out in step 10 fails if we have non-conjugate priors
+Showing how the gradient descent algorithm laid out in step 10 fails 
+if we have much more complicated, deeply nested hierarchical priors
 
 [step_11.py](./vignettes/step_11.py)
 
@@ -82,7 +83,9 @@ Since we cannot optimize our loss function, the next best thing to try is an MCM
 
 ## Step 13
 
-Since our MCMC sampler is too slow, the next best thing to try is SVI. This step demonstrated SVI using a manually
+The MCMC sampler works great but it is maybe too slow, so the next best thing to try is SVI. 
+
+For the sake of simplicity we return to the simple model from step 10 and show how to run SVI on it using a manually
 constructed guide
 
 [step_13.py](./vignettes/step_13.py)
@@ -96,13 +99,14 @@ see the results are the same as our manually constructed guide.
 
 ## Step 15
 
-Demonstrating nested plates, and the peculiarity of indexing into nested plates in pyro
+Demonstrating nested plates, and the peculiarity of indexing into nested plates in pyro. We show two equivalent
+ways to nest plates in pyro.
 
 [step_15.py](./vignettes/step_15.py)
 
 ## Step 16
 
-Demonstrating the difference between batch and event dimensions with an example model that has to deal with both
+Demonstrating the difference between batch and event dimensions with an example model that has to deal with both.
 
 [step_16.py](./vignettes/step_16.py)
 
