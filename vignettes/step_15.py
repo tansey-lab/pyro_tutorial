@@ -29,7 +29,6 @@ def the_indexing_we_know_and_love():
     print(result)
 
 
-
 def model_v2(data=None, N=None, J=None):
     if data is None and N is None and J is None:
         raise ValueError("Someone has gotta tell us how many observations there are")
@@ -57,7 +56,6 @@ def main():
         ),
         filename="step_15_model.png",
     )
-
 
     pyro.util.set_rng_seed(0)
     print(model(data=None, N=10, J=3))

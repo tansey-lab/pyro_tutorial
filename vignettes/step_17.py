@@ -19,8 +19,8 @@ def plot_histogram(arr1, arr2, output_fn: str):
     Create a histogram for the two arrays overlapping in different colors and save to file
     """
     plt.figure(figsize=(10, 10))
-    sns.histplot(arr1, color='blue', label='observed')
-    sns.histplot(arr2, color='orange', label='predicted')
+    sns.histplot(arr1, color="blue", label="observed")
+    sns.histplot(arr2, color="orange", label="predicted")
     plt.legend()
     plt.savefig(output_fn)
 
@@ -30,11 +30,11 @@ def plot_confusion_matrix(arr_observed, arr_predicted, output_fn: str):
     Create a confusion matrix for the two provided arrays using matplotlib and save to a file.
     """
     cm = confusion_matrix(arr_observed, arr_predicted)
-    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
     plt.figure(figsize=(10, 10))
-    sns.heatmap(cm, annot=True, fmt='.2f', cmap='Blues')
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
+    sns.heatmap(cm, annot=True, fmt=".2f", cmap="Blues")
+    plt.ylabel("True label")
+    plt.xlabel("Predicted label")
     plt.savefig(output_fn)
 
 
@@ -74,16 +74,18 @@ def model(K, data=None, n_obs=None):
     with pyro.plate("data", n_obs):
         # Local variables.
         assignment = pyro.sample(
-            "assignment",
-            dist.Categorical(weights),
-            infer={"enumerate": "parallel"})
+            "assignment", dist.Categorical(weights), infer={"enumerate": "parallel"}
+        )
         return pyro.sample("obs", dist.Normal(locs[assignment], scale), obs=data)
+
 
 def main():
     pyro.util.set_rng_seed(0)
     rng = np.random.default_rng(66)
 
-    data_np, scale_truth, weights_truth, locs_truth, assignments_truth = generate_data(100, 2, rng)
+    data_np, scale_truth, weights_truth, locs_truth, assignments_truth = generate_data(
+        100, 2, rng
+    )
 
     data = torch.tensor(data_np, dtype=torch.float32)
 
@@ -102,22 +104,25 @@ def main():
         losses.append(loss)
 
     print(
-        "locs truth", locs_truth,
-        "SVI locs", pyro.param("AutoNormal.locs.locs").detach().numpy())
+        "locs truth",
+        locs_truth,
+        "SVI locs",
+        pyro.param("AutoNormal.locs.locs").detach().numpy(),
+    )
 
     guide_trace = poutine.trace(guide).get_trace(K, data)  # record the globals
     trained_model = poutine.replay(model, trace=guide_trace)  # replay the globals
 
     def classifier(K, data):
         inferred_model = infer_discrete(
-            trained_model,
-            temperature=0,
-            first_available_dim=-2
+            trained_model, temperature=0, first_available_dim=-2
         )  # avoid conflict with data plate
         trace = poutine.trace(inferred_model).get_trace(K, data)
         return trace.nodes["assignment"]["value"]
 
-    plot_confusion_matrix(assignments_truth, classifier(K, data), "confusion_matrix.png")
+    plot_confusion_matrix(
+        assignments_truth, classifier(K, data), "confusion_matrix.png"
+    )
 
     sample = trained_model(K=2, data=None, n_obs=100)
 
