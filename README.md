@@ -126,6 +126,16 @@ initialization values
 
 # Other Resources
 
-Lecture from David Blei on Variational Inference
+## Lecture from David Blei on Variational Inference
 
 https://youtu.be/DaqNNLidswA
+
+## MiniPyro
+
+A contributor has made a completely stripped down implementation of the pyro framework 
+that is only a few hundred lines of code and pretty closely emulates what the full version of pyro does
+
+Reading through this implementation can give you deep insight into how pyro itself works and I highly recommend it
+for advanced users:
+
+https://github.com/pyro-ppl/pyro/blob/727aff741e105715840bfdafee5bfeda7e8b65e8/pyro/contrib/minipyro.py#L15
