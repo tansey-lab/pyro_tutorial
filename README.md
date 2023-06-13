@@ -24,15 +24,14 @@ Introducing `pyro.plate`, a primitive for marking conditionally independent vari
 
 ## Step 4
 
-Introducing `poutine.trace`, a tool for calculating the log probability sum of 
-an observation from our posterior distribution
+Introducing `poutine.trace`, our first "effect handler"
 
 [./vignettes/step_4.py](step_4.py)
 
 ## Step 5
 
 Introducing the internal structure of `poutine.trace`, and how that structure can be used to calculate the 
-log probability and also create a graphical model plate diagram
+log probability sum and also create a graphical model plate diagram
 
 [./vignettes/step_5.py](step_5.py)
 
