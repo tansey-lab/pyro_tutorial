@@ -120,3 +120,8 @@ initialization values
 
 [./vignettes/step_18.py](step_18.py)
 
+# Other Resources
+
+Lecture from David Blei on Variation Inference
+
+https://youtu.be/DaqNNLidswA
