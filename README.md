@@ -130,6 +130,15 @@ initialization values
 
 https://youtu.be/DaqNNLidswA
 
+## Step 19
+
+Demonstrating how to plot the ELBO loss curve for a model.
+
+Inspecting this curve can give you insight into if you need to run for more SVI steps and if your model is
+converging.
+
+[step_19.py](./vignettes/step_18.py)
+
 ## MiniPyro
 
 A contributor has made a completely stripped down implementation of the pyro framework 
