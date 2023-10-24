@@ -92,7 +92,7 @@ def main():
     K = 2  # Fixed number of components.
 
     trace = poutine.trace(poutine.enum(model, first_available_dim=-2)).get_trace(K)
-    trace.compute_log_prob()  # optional, but allows printing of log_prob shapes
+    trace.compute_log_prob()
     print("---------- Tensor Shapes ------------")
     print(trace.format_shapes())
 
