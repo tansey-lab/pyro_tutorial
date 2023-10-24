@@ -104,6 +104,17 @@ ways to nest plates in pyro.
 
 [step_15.py](./vignettes/step_15.py)
 
+## ⚠️ Required Reading ⚠️
+
+It will be very difficult to understand the next vignette unless you
+understand the concept of "batch" and "event" dimensions.
+
+This concept is explained very well by this blog post:
+
+https://ericmjl.github.io/blog/2019/5/29/reasoning-about-shapes-and-probability-distributions/
+
+(you only need to read up to the "Other Scenarios" section)
+
 ## Step 16
 
 Demonstrating the difference between batch and event dimensions with an example model that has to deal with both.
