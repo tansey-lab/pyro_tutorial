@@ -124,12 +124,6 @@ initialization values
 
 [step_18.py](./vignettes/step_18.py)
 
-# Other Resources
-
-## Lecture from David Blei on Variational Inference
-
-https://youtu.be/DaqNNLidswA
-
 ## Step 19
 
 Demonstrating how to plot the ELBO loss curve for a model.
@@ -138,6 +132,12 @@ Inspecting this curve can give you insight into if you need to run for more SVI 
 converging.
 
 [step_19.py](./vignettes/step_18.py)
+
+# Other Resources
+
+## Lecture from David Blei on Variational Inference
+
+https://youtu.be/DaqNNLidswA
 
 ## MiniPyro
 
