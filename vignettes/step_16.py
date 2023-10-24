@@ -55,6 +55,10 @@ def main():
     guide = AutoNormal(model)
 
     trace = poutine.trace(model).get_trace(data)
+    trace.compute_log_prob()
+    print("---------- Tensor Shapes ------------")
+    print(trace.format_shapes())
+
     print(trace.log_prob_sum())
 
     pyro.render_model(model, model_args=(data,), filename="model.png")

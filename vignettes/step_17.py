@@ -91,6 +91,11 @@ def main():
 
     K = 2  # Fixed number of components.
 
+    trace = poutine.trace(poutine.enum(model, first_available_dim=-2)).get_trace(K)
+    trace.compute_log_prob()  # optional, but allows printing of log_prob shapes
+    print("---------- Tensor Shapes ------------")
+    print(trace.format_shapes())
+
     optim = pyro.optim.Adam({"lr": 0.1})
     elbo = TraceEnum_ELBO(max_plate_nesting=1)
 
