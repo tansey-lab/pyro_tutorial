@@ -36,6 +36,8 @@ def main():
             10,
         ),
         filename="step_5_model.png",
+        render_params=True,
+        render_distributions=True,
     )
 
 
