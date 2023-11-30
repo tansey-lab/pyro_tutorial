@@ -8,7 +8,7 @@ from pyro.distributions import Gamma, Dirichlet
 from pyro.infer import SVI, Trace_ELBO
 from pyro.infer.autoguide import AutoNormal
 from pyro.optim import Adam
-
+from torch.distributions import biject_to
 
 def model(expression_truth=None, N=None, J=None, K=None):
     if expression_truth is not None:
@@ -68,11 +68,20 @@ def main():
     for step in tqdm.trange(1000):  # Consider running for more steps.
         loss = svi.step(data)
 
-    alpha_loc = pyro.param("AutoNormal.locs.alpha").detach().numpy()
-    alpha_scale = pyro.param("AutoNormal.scales.alpha").detach().numpy()
+    alpha_loc = pyro.param("AutoNormal.locs.alpha")
+    alpha_scale = pyro.param("AutoNormal.scales.alpha")
+
+    # We might be surprised to see alpha_loc is negative sometimes! This is impossible for a Gamma distribution.
+
+    # While its true gamma distributions have support only for positive numbers, we used an AutoNormal guide, which means
+    # our variational family is unconstrained over all parameters. In order to make the autoguide line up with our model
+    # pyro automatically applies transformations so the support of the parameters match the support of the distributions.
+    # We can transform the parameters back to the original space by using the biject_to function and the support of the distribution
+    # we used in our model, this gives us a function that will transform the parameters back to the original space.
+    alpha_loc_transformed_back = biject_to(Gamma.support)(alpha_loc)
 
     create_imshow_comparison_of_numpy_arrays(
-        alpha_truth, alpha_loc, alpha_scale, "step_16.png"
+        alpha_truth, alpha_loc_transformed_back.detach().numpy(), alpha_scale.detach().numpy(), "step_16.png"
     )
 
 
